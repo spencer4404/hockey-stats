@@ -8,20 +8,26 @@ class HockeyStats:
         # all the stats stay here
         self.stats = json.loads(data)
 
-    # for testing
-    def print_file(self):
-        print(self.stats)
-
+    # search for a player by name
+    def search_for_player(self, name):
+        for i in self.stats:
+            if i["name"].lower() == name.lower():
+                return i
+            
 class HockeyStatsApplication:
     def __init__(self):
         # get the filename to create the stats object
-        filename = input("filename: ")
+        if True:
+            filename = "partial.json"
+        else:
+            filename = input("filename: ")
         self.hockeystats = HockeyStats(filename)
 
-    # searching for a specific player
+    # searching for a specific player by name
     def search_for_player(self):
         name = input("name: ")
-        pass
+        player_stats = self.hockeystats.search_for_player(name)
+        print(player_stats)
 
     # list the possible commands
     def help(self):
