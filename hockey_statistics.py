@@ -21,6 +21,16 @@ class HockeyStats:
     def get_countries(self):
         return sorted(set([player["nationality"] for player in self.stats]))
     
+    # get all the players from specific team, sort in order of points
+    def get_players_from_team(self, team):
+        players = [player for player in self.stats if player["team"].lower() == team.lower()]
+        return sorted(players, key = (lambda player: player["assists"] + player["goals"]), reverse=True)
+    
+    # get all the players from specific country, sort in order of points
+    def get_players_from_country(self, country):
+        players = [player for player in self.stats if player["nationality"].lower() == country.lower()]
+        return sorted(players, key = (lambda player: player["assists"] + player["goals"]), reverse=True)
+    
 class HockeyStatsApplication:
     def __init__(self):
         # get the filename to create the stats object
@@ -44,6 +54,16 @@ class HockeyStatsApplication:
     # get all the countries
     def countries(self):
         return self.hockeystats.get_countries()
+    
+    # get all the players from a certain team
+    def players_from_team(self):
+        team = input("team: ")
+        return self.hockeystats.get_players_from_team(team)
+
+    # get all the player from a certain country
+    def players_from_country(self):
+        country = input("country: ")
+        return self.hockeystats.get_players_from_country(country)
 
     # creating the nicely spaced output string
     def make_string(self, players: list) -> str:
@@ -66,16 +86,26 @@ class HockeyStatsApplication:
             # search for a specific player by name
             elif command == "1":
                 player = self.search_for_player()
-                print(self.make_string(player))
+                self.make_string(player)
+                print()
             # list all the teams
             elif command == "2":
-                print("\n".join(self.teams()))
-                print()
+                print("\n".join(self.teams()) + "\n")
             # list all the countries
             elif command == "3":
-                print("\n".join(self.countries()))
+                print("\n".join(self.countries()) + "\n")
+            # list all players from a certain team
+            elif command == "4":
+                players = self.players_from_team()
                 print()
-            
+                self.make_string(players)
+                print()
+            # list all players from certain country
+            elif command == "5":
+                players = self.players_from_country()
+                print()
+                self.make_string(players)
+                print()
 
 app = HockeyStatsApplication()
 app.execute()
