@@ -31,6 +31,15 @@ class HockeyStats:
         players = [player for player in self.stats if player["nationality"].lower() == country.lower()]
         return sorted(players, key = (lambda player: player["assists"] + player["goals"]), reverse=True)
     
+    # get the specified amount of players with the most points
+    def get_most_points(self, amount):
+        # list of the specificed amount of players with the most points in increasing order, ties are broken with goals amount
+        return sorted(self.stats, key = (lambda player: (player["assists"] + player["goals"], player["goals"])), reverse=True)[:int(amount)]
+    
+    # get the specified amount of players with the most goals
+    def get_most_goals(self, amount):
+        return sorted(self.stats, key = (lambda player: (player["goals"], -player["games"])), reverse=True)[:int(amount)]
+
 class HockeyStatsApplication:
     def __init__(self):
         # get the filename to create the stats object
@@ -60,11 +69,21 @@ class HockeyStatsApplication:
         team = input("team: ")
         return self.hockeystats.get_players_from_team(team)
 
-    # get all the player from a certain country
+    # get all the players from a certain country
     def players_from_country(self):
         country = input("country: ")
         return self.hockeystats.get_players_from_country(country)
 
+    # get specificed amount of players with the most points
+    def most_points(self):
+        amount = input("how many: ")
+        return self.hockeystats.get_most_points(amount)
+    
+    # get specified amount of players with most goals
+    def most_goals(self):
+        amount = input("how many: ")
+        return self.hockeystats.get_most_goals(amount)
+    
     # creating the nicely spaced output string
     def make_string(self, players: list) -> str:
         for player in players:
@@ -104,6 +123,19 @@ class HockeyStatsApplication:
             elif command == "5":
                 players = self.players_from_country()
                 print()
+                self.make_string(players)
+                print()
+            # list players with most points
+            elif command == "6":
+                players = self.most_points()
+                print()
+                self.make_string(players)
+                print()
+            # list players with most goals
+            elif command == "7":
+                players = self.most_goals()
+                print()
+                print(players)
                 self.make_string(players)
                 print()
 
