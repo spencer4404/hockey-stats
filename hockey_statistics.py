@@ -135,7 +135,6 @@ class HockeyStatsApplication:
             elif command == "7":
                 players = self.most_goals()
                 print()
-                print(players)
                 self.make_string(players)
                 print()
 
