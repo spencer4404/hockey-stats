@@ -10,10 +10,9 @@ class HockeyStats:
 
     # search for a player by name
     def search_for_player(self, name):
-        for i in self.stats:
-            if i["name"].lower() == name.lower():
-                return i
-            
+        # return a list to match the string comprehension
+        return [i for i in self.stats if i["name"].lower() == name.lower()]
+    
 class HockeyStatsApplication:
     def __init__(self):
         # get the filename to create the stats object
@@ -27,7 +26,13 @@ class HockeyStatsApplication:
     def search_for_player(self):
         name = input("name: ")
         player_stats = self.hockeystats.search_for_player(name)
-        print(player_stats)
+        return player_stats
+
+    # creating the nicely spaced output string
+    def make_string(self, players: list) -> str:
+        for player in players:
+            total_points = player["assists"] + player["goals"]
+            return f"{player["name"]:<21}{player["team"]:<5}{player["goals"]:>2} + {player["assists"]:>2} = {total_points:>3}"
 
     # list the possible commands
     def help(self):
@@ -41,9 +46,10 @@ class HockeyStatsApplication:
             # exit
             if command == "0":
                 break
-            # search for a specific player
+            # search for a specific player by name
             elif command == "1":
-                self.search_for_player()
+                player = self.search_for_player()
+                print(self.make_string(player))
 
 
 app = HockeyStatsApplication()
